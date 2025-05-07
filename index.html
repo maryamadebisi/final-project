@@ -1,0 +1,87 @@
+<style>
+  
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  main {
+    border: 1px solid black;
+    padding: 20px;
+    width: 300px;
+    opacity: 1;
+    transition: all 3s;
+  }
+  
+  .captcha {
+    width: 100%;
+  }
+
+</style>
+
+<main>
+  <h1 class="title">Says Something</h1>
+  <img class="captcha" src="keyboard-cat.jpg" alt="captcha image">
+  <p>Type the text:</p>
+  <input type="text" class="answer">
+  <button class="enter">Enter</button>
+</main>
+
+<script src="https://cdn.jsdelivr.net/gh/netizenorg/netnet-standard-library/build/nn.min.js"></script>
+<script>
+/* global nn */
+  let cap = 0
+  const data = [
+    {
+      title: 'First Captcha',
+      image: 'keyboard-cat.jpg',
+      answer: 'music'
+    },
+    {
+      title: 'Another Captcha',
+      image: 'ceiling-cat.jpg',
+      answer: 'music'
+    },
+    {
+      title: 'Last One',
+      image: 'grumpy-cat.jpg',
+      answer: 'music'
+    }
+  ]
+  
+  function updateCaptcha () {
+    const c = data[cap]
+    nn.get('.title').content(c.title)
+    nn.get('.captcha').set({ src: c.image })
+    nn.get('.answer').value = ''
+  }
+  
+  async function checkCaptcha () {
+    const c = data[cap]
+    const text = nn.get('.answer').value
+    if (text.toLowerCase() === c.answer) {
+      cap++
+      nn.get('main')
+        .scale(4)
+        .css({ opacity: 0 })
+      await nn.sleep(3000)
+      updateCaptcha()
+      await nn.sleep(100)
+      nn.get('main')
+        .scale(1)
+        .css({ opacity: 1, transition: 'none' })
+      await nn.sleep(100)
+      nn.get('main').css({ transition: 'all 3s' })
+    } else {
+      alert('wrong') 
+    }
+  }
+  
+  
+  nn.get('.enter').on('click', checkCaptcha)
+  nn.on('load', updateCaptcha)
+  
+</script>
