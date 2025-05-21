@@ -87,6 +87,34 @@
     color: black;
   }
 
+  .grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.box {
+  border: 2px solid #444;
+  padding: 2px;
+  cursor: pointer;
+  filter: grayscale(50%);
+  transition: transform 0.2s, filter 0.2s, border-color 0.2s;
+}
+
+.box img {
+  width: 100%;
+  object-fit: cover;
+  height: 100%;
+  display: block;
+}
+
+.box.selected {
+  border-color: #0f0;
+  filter: grayscale(0%) brightness(120%);
+  transform: scale(1.05);
+}
+
 </style>
 
 <main>
@@ -97,11 +125,26 @@
   <button class="enter">Enter</button>
 </main>
 
+<main id="grid-captcha" style="display: none;">
+  <h1 class="title">Checkpoint Authorization</h1>
+  <p>Select all vehicles attempting border entry</p>
+
+  <div class="grid">
+    <div class="box" data-correct="true"><img src="car1.jpg" alt=""></div>
+    <div class="box" data-correct="false"><img src="tree1.jpg" alt=""></div>
+    <div class="box" data-correct="true"><img src="truck1.jpg" alt=""></div>
+    <div class="box" data-correct="false"><img src="sign1.jpg" alt=""></div>
+    <div class="box" data-correct="true"><img src="van1.jpg" alt=""></div>
+    <div class="box" data-correct="false"><img src="cloud1.jpg" alt=""></div>
+  </div>
+
+  <button class="enter grid-submit">Submit</button>
+</main>
 
 <script src="https://cdn.jsdelivr.net/gh/netizenorg/netnet-standard-library/build/nn.min.js"></script>
 <script>
 /* global nn */
-  let cap = 0
+let cap = Number(localStorage.getItem('cap')) || 0
   const data = [
     {
       title: 'Type the text you see in the image:',
@@ -128,29 +171,75 @@
   }
 
   async function checkCaptcha () {
+    localStorage.setItem('cap', cap)
     const c = data[cap]
     const text = nn.get('.answer').value
     if (text.toLowerCase() === c.answer.toLowerCase()) {
-      cap++
-      nn.get('main')
-        .scale(4)
-        .css({ opacity: 0 })
-      await nn.sleep(3000)
-      updateCaptcha()
-      await nn.sleep(100)
-      nn.get('main')
-        .scale(1)
-        .css({ opacity: 1, transition: 'none' })
-      await nn.sleep(100)
-      nn.get('main').css({ transition: 'all 3s' })
-    } else {
-      alert('wrong') 
-    }
+  cap++
+  nn.get('main')
+    .scale(4)
+    .css({ opacity: 0 })
+  await nn.sleep(3000)
+
+  if (cap >= data.length) {
+    // All text CAPTCHAs are done, show the grid
+    document.querySelector('main').style.display = 'none'
+    document.getElementById('grid-captcha').style.display = 'block'
+  } else {
+    updateCaptcha()
+    await nn.sleep(100)
+    nn.get('main')
+      .scale(1)
+      .css({ opacity: 1, transition: 'none' })
+    await nn.sleep(100)
+    nn.get('main').css({ transition: 'all 3s' })
+  }
+}
+
   }
   
  // for middle level, look down at your hands, pick which box best matches the shade within your visio
 
 nn.get('.enter').on('click', checkCaptcha)
-  nn.on('load', updateCaptcha)
+nn.on('load', () => {
+  if (cap >= data.length) {
+    // Skip to grid CAPTCHA if text CAPTCHAs already done
+    document.querySelector('main').style.display = 'none'
+    document.getElementById('grid-captcha').style.display = 'block'
+  } else {
+    updateCaptcha()
+  }
+})
+// Grid selection toggle
+document.querySelectorAll('.box').forEach(box => {
+  box.addEventListener('click', () => {
+    box.classList.toggle('selected')
+  })
+})
+
+// Grid answer check
+document.querySelector('.grid-submit').addEventListener('click', () => {
+  let allCorrect = true
+  document.querySelectorAll('.box').forEach(box => {
+    const correct = box.getAttribute('data-correct') === 'true'
+    const selected = box.classList.contains('selected')
+    if (correct !== selected) allCorrect = false
+  })
+
+  if (allCorrect) {
+    alert('Final access granted. You may pass.')
+    // Add next action or redirect here
+  } else {
+    alert('Checkpoint failed. Try again.')
+  }
+})
+  if (allCorrect) {
+  alert('Final access granted. You may pass.')
+  localStorage.setItem('captchaDone', 'true')
+}
+
 
 </script>
+
+<button onclick="localStorage.clear(); location.reload()">Reset CAPTCHA</button>
+
