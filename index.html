@@ -213,11 +213,20 @@
   <button onclick="validateJustification()">Submit</button>
   <div class="response" id="justificationResponse"></div>
 </main>
-<button class="enter" onclick="skipToFinalCaptcha()">Skip to Final CAPTCHA</button>
+<main id="final-entry-message" style="display: none;">
+  <h1 class="title">Entry Granted</h1>
+  <p style="color: #0f0; font-size: 14px; text-transform: uppercase; margin-top: 10px;">
+    Your answers have been recorded.<br>
+    Access granted.<br>
+    Welcome.
+  </p>
+</main>
+
+
 <script src="https://cdn.jsdelivr.net/gh/netizenorg/netnet-standard-library/build/nn.min.js"></script>
 <script>
 /* global nn */
-let cap = Number(localStorage.getItem('cap')) || 0
+let cap = 0
   const data = [
     {
       title: 'Type the text you see in the image:',
@@ -404,15 +413,26 @@ setTimeout(() => {
 function validateJustification() {
   const input = document.getElementById('userJustification').value.trim()
   const response = document.getElementById('justificationResponse')
+  const border3 = document.getElementById('border-captcha-3')
+  const finalMessage = document.getElementById('final-entry-message')
 
   if (input.length === 0) {
     response.textContent = "An absence of reason is still a reason."
   } else {
     response.textContent = `"${input}" has been noted. This record will be reviewed by unseen authorities.`
+
+    // Animate transition to final message
+    setTimeout(() => {
+      border3.classList.add('zoom-out')
+    }, 1500)
+
+    setTimeout(() => {
+      border3.style.display = 'none'
+      finalMessage.style.display = 'block'
+      finalMessage.scrollIntoView({ behavior: 'smooth' })
+    }, 3000)
   }
 }
 
-</script>
 
-<button onclick="localStorage.clear(); location.reload()">Reset CAPTCHA</button>
-<button class="enter" onclick="skipToFinalCaptcha()">Skip to Final CAPTCHA</button>
+</script>
