@@ -132,8 +132,8 @@
 </main>
 
 <main id="grid-captcha" style="display: none;">
-  <h1 class="title">Checkpoint Authorization</h1>
-  <p>Select all valid forms of ID for entry</p>
+  <h1 class="title">Select all valid forms of ID for entry</h1>
+  <p></p>
 
   <div class="grid">
     <div class="box" data-correct="false"><img src="library card.webp" alt=""></div>
@@ -148,17 +148,31 @@
 </main>
 
 <main id="grid-captcha-2" style="display: none;">
-  <h1 class="title">Secondary Inspection</h1>
-  <p>Choose the Verified Border Crossings</p>
+  <h1 class="title">Select all the verified border crossings</h1>
+  <p></p>
   <div class="grid">
-    <div class="box" data-correct="true"><img src="fingerprint.jpg" alt=""></div>
-    <div class="box" data-correct="false"><img src="dog.jpg" alt=""></div>
-    <div class="box" data-correct="true"><img src="iris.jpg" alt=""></div>
-    <div class="box" data-correct="false"><img src="buspass.jpg" alt=""></div>
-    <div class="box" data-correct="true"><img src="face.jpg" alt=""></div>
-    <div class="box" data-correct="false"><img src="smile.jpg" alt=""></div>
+    <div class="box" data-correct="true"><img src="customs.jpg" alt=""></div>
+    <div class="box" data-correct="false"><img src="fores.jpg" alt=""></div>
+    <div class="box" data-correct="false"><img src="sewer.webp" alt=""></div>
+    <div class="box" data-correct="true"><img src="airport.jpg" alt=""></div>
+    <div class="box" data-correct="false"><img src="desert.webp" alt=""></div>
+    <div class="box" data-correct="true"><img src="land.jpg" alt=""></div>
   </div>
   <button class="enter grid-submit-2">Submit</button>
+</main>
+
+<main id="grid-captcha-3" style="display: none;">
+  <h1 class="title">Select all biometric identifiers</h1>
+  <p></p>
+  <div class="grid">
+    <div class="box" data-correct="true"><img src="fingerprint.jpg" alt=""></div>
+    <div class="box" data-correct="false"><img src="watch.jpg" alt=""></div>
+    <div class="box" data-correct="true"><img src="iris.jpg" alt=""></div>
+    <div class="box" data-correct="false"><img src="nailpolish.jpg" alt=""></div>
+    <div class="box" data-correct="true"><img src="face.jpg" alt=""></div>
+    <div class="box" data-correct="false"><img src="bracelet.jpg" alt=""></div>
+  </div>
+  <button class="enter grid-submit-3">Submit</button>
 </main>
 
 <script src="https://cdn.jsdelivr.net/gh/netizenorg/netnet-standard-library/build/nn.min.js"></script>
@@ -173,13 +187,13 @@ let cap = Number(localStorage.getItem('cap')) || 0
     },
     {
       title: 'Type the text you see in the image:',
-      image: 'illegalalien.png',
-      answer: 'i113g4l41i3n'
+      image: 'captcha.png',
+      answer: 'i113g41a1i3n'
     },
     {
-      title: 'Last One',
-      image: 'grumpy-cat.jpg',
-      answer: 'music'
+      title: 'Type the text you see in the image:',
+      image: 'captcha (1).png',
+      answer: '4syLUmd3n13d'
     }
   ]
 
@@ -257,7 +271,7 @@ document.querySelector('.grid-submit').addEventListener('click', async () => {
     alert('Checkpoint failed. Try again.')
   }
 })
-  document.querySelector('.grid-submit-2').addEventListener('click', () => {
+ document.querySelector('.grid-submit-2').addEventListener('click', async () => {
   let allCorrect = true
   document.querySelectorAll('#grid-captcha-2 .box').forEach(box => {
     const correct = box.getAttribute('data-correct') === 'true'
@@ -266,9 +280,28 @@ document.querySelector('.grid-submit').addEventListener('click', async () => {
   })
 
   if (allCorrect) {
-    alert('Checkpoint cleared. Welcome.')
+    const gridMain2 = document.getElementById('grid-captcha-2')
+    gridMain2.classList.add('zoom-out')
+    await new Promise(resolve => setTimeout(resolve, 2000))
+    gridMain2.style.display = 'none'
+    document.getElementById('grid-captcha-3').style.display = 'block'
   } else {
     alert('Secondary inspection failed.')
+  }
+})
+  
+document.querySelector('.grid-submit-3').addEventListener('click', () => {
+  let allCorrect = true
+  document.querySelectorAll('#grid-captcha-3 .box').forEach(box => {
+    const correct = box.getAttribute('data-correct') === 'true'
+    const selected = box.classList.contains('selected')
+    if (correct !== selected) allCorrect = false
+  })
+
+  if (allCorrect) {
+    alert('You have passed final verification. Welcome.')
+  } else {
+    alert('Final verification failed. Try again.')
   }
 })
 
