@@ -115,6 +115,12 @@
   transform: scale(1.05);
 }
 
+  .zoom-out {
+  transform: scale(4);
+  opacity: 0;
+  transition: transform 2s ease, opacity 2s ease;
+}
+
 </style>
 
 <main>
@@ -130,15 +136,29 @@
   <p>Select all valid forms of ID for entry</p>
 
   <div class="grid">
-    <div class="box" data-correct="true"><img src="library card.webp" alt=""></div>
+    <div class="box" data-correct="false"><img src="library card.webp" alt=""></div>
     <div class="box" data-correct="false"><img src="library.jpg" alt=""></div>
-    <div class="box" data-correct="true"><img src="oregon.webp" alt=""></div>
-    <div class="box" data-correct="false"><img src="sign1.jpg" alt=""></div>
-    <div class="box" data-correct="true"><img src="van1.jpg" alt=""></div>
-    <div class="box" data-correct="false"><img src="cloud1.jpg" alt=""></div>
+    <div class="box" data-correct="false"><img src="oregon.webp" alt=""></div>
+    <div class="box" data-correct="true"><img src="passport.avif" alt=""></div>
+    <div class="box" data-correct="false"><img src="mpassport.jpeg" alt=""></div>
+    <div class="box" data-correct="true"><img src="realid.jpg" alt=""></div>
   </div>
 
   <button class="enter grid-submit">Submit</button>
+</main>
+
+<main id="grid-captcha-2" style="display: none;">
+  <h1 class="title">Secondary Inspection</h1>
+  <p>Choose the Verified Border Crossings</p>
+  <div class="grid">
+    <div class="box" data-correct="true"><img src="fingerprint.jpg" alt=""></div>
+    <div class="box" data-correct="false"><img src="dog.jpg" alt=""></div>
+    <div class="box" data-correct="true"><img src="iris.jpg" alt=""></div>
+    <div class="box" data-correct="false"><img src="buspass.jpg" alt=""></div>
+    <div class="box" data-correct="true"><img src="face.jpg" alt=""></div>
+    <div class="box" data-correct="false"><img src="smile.jpg" alt=""></div>
+  </div>
+  <button class="enter grid-submit-2">Submit</button>
 </main>
 
 <script src="https://cdn.jsdelivr.net/gh/netizenorg/netnet-standard-library/build/nn.min.js"></script>
@@ -218,25 +238,39 @@ document.querySelectorAll('.box').forEach(box => {
 })
 
 // Grid answer check
-document.querySelector('.grid-submit').addEventListener('click', () => {
+document.querySelector('.grid-submit').addEventListener('click', async () => {
   let allCorrect = true
-  document.querySelectorAll('.box').forEach(box => {
+  document.querySelectorAll('#grid-captcha .box').forEach(box => {
     const correct = box.getAttribute('data-correct') === 'true'
     const selected = box.classList.contains('selected')
     if (correct !== selected) allCorrect = false
   })
 
   if (allCorrect) {
-    alert('Final access granted. You may pass.')
-    // Add next action or redirect here
+    localStorage.setItem('captchaDone', 'true')
+    const gridMain = document.getElementById('grid-captcha')
+    gridMain.classList.add('zoom-out')
+    await new Promise(resolve => setTimeout(resolve, 2000))
+    gridMain.style.display = 'none'
+    document.getElementById('grid-captcha-2').style.display = 'block'
   } else {
     alert('Checkpoint failed. Try again.')
   }
 })
+  document.querySelector('.grid-submit-2').addEventListener('click', () => {
+  let allCorrect = true
+  document.querySelectorAll('#grid-captcha-2 .box').forEach(box => {
+    const correct = box.getAttribute('data-correct') === 'true'
+    const selected = box.classList.contains('selected')
+    if (correct !== selected) allCorrect = false
+  })
+
   if (allCorrect) {
-  alert('Final access granted. You may pass.')
-  localStorage.setItem('captchaDone', 'true')
-}
+    alert('Checkpoint cleared. Welcome.')
+  } else {
+    alert('Secondary inspection failed.')
+  }
+})
 
 
 </script>
