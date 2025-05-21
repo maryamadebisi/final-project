@@ -194,12 +194,26 @@
 
 <main id="border-captcha-1" style="display: none;">
   <div class="title">Border Statement</div>
-  <div class="prompt">To proceed, state your purpose.</div>
-  <textarea id="userStatement" placeholder="Type something meaningful, or not..."></textarea>
+  <div class="prompt">To proceed, state your purpose in entering the United States.</div>
+  <textarea id="userStatement" placeholder="Type something meaningful..."></textarea>
   <button onclick="validateBorderCaptcha()">Submit</button>
   <div class="response" id="captchaResponse"></div>
 </main>
-
+<main id="border-captcha-2" style="display: none;">
+  <div class="title">Declaration of Loss</div>
+  <div class="prompt">We record what is no longer with you. Type what you’ve left behind.</div>
+  <textarea id="userLoss" placeholder=""></textarea>
+  <button onclick="validateLossCaptcha()">Submit</button>
+  <div class="response" id="lossResponse"></div>
+</main>
+<main id="border-captcha-3" style="display: none;">
+  <div class="title">Justification</div>
+  <div class="prompt">Why do you deserve entry into the United States?</div>
+  <textarea id="userJustification" placeholder="In 50 words or less..."></textarea>
+  <button onclick="validateJustification()">Submit</button>
+  <div class="response" id="justificationResponse"></div>
+</main>
+<button class="enter" onclick="skipToFinalCaptcha()">Skip to Final CAPTCHA</button>
 <script src="https://cdn.jsdelivr.net/gh/netizenorg/netnet-standard-library/build/nn.min.js"></script>
 <script>
 /* global nn */
@@ -346,20 +360,59 @@ function skipToFinalCaptcha() {
   }
 }
   
-  function validateBorderCaptcha() {
+ function validateBorderCaptcha() {
   const input = document.getElementById('userStatement').value.trim()
   const response = document.getElementById('captchaResponse')
+  const border1 = document.getElementById('border-captcha-1')
+  const border2 = document.getElementById('border-captcha-2')
 
   if (input.length === 0) {
     response.textContent = "Silence is also a choice. But not a valid one here."
   } else {
-    response.textContent = `"${input}" logged. The gate acknowledges your intent. Access granted.`
-    // Optional: hide current, show next, trigger animation, etc.
+    response.textContent = `"${input}" logged. The gate acknowledges your intent.`
+    
+    // Animate zoom-out of the first captcha
+    border1.classList.add('zoom-out')
+
+    setTimeout(() => {
+      border1.style.display = 'none'
+      border2.style.display = 'block'
+    }, 2000) // matches transition duration
+  }
+}
+
+function validateLossCaptcha() {
+  const input = document.getElementById('userLoss').value.trim()
+  const response = document.getElementById('lossResponse')
+
+  if (input.length === 0) {
+    response.textContent = "Nothing? That too will be recorded."
+  } else {
+    response.textContent = `"${input}" has been registered as loss.`
+    // Optional: transition to next CAPTCHA or end scene
+    setTimeout(() => {
+  document.getElementById('border-captcha-2').classList.add('zoom-out')
+}, 1000)
+
+setTimeout(() => {
+  document.getElementById('border-captcha-2').style.display = 'none'
+  document.getElementById('border-captcha-3').style.display = 'block'
+  document.getElementById('border-captcha-3').scrollIntoView({ behavior: 'smooth' })
+}, 2500)
+  }
+}
+function validateJustification() {
+  const input = document.getElementById('userJustification').value.trim()
+  const response = document.getElementById('justificationResponse')
+
+  if (input.length === 0) {
+    response.textContent = "An absence of reason is still a reason."
+  } else {
+    response.textContent = `"${input}" has been noted. This record will be reviewed by unseen authorities.`
   }
 }
 
 </script>
 
 <button onclick="localStorage.clear(); location.reload()">Reset CAPTCHA</button>
-
 <button class="enter" onclick="skipToFinalCaptcha()">Skip to Final CAPTCHA</button>
