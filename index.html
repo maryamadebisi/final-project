@@ -138,7 +138,7 @@
   }
 </style>
 
-<!-- Core Captcha Sequence -->
+<!-- Captcha Sequence HTML -->
 <main id="text-captcha">
   <h1 class="title">Says Something</h1>
   <img class="captcha" src="keyboard-cat.jpg" alt="captcha image">
@@ -185,18 +185,18 @@
   <button class="enter grid-submit-3">Submit</button>
 </main>
 
-<!-- Border-style text captchas -->
+<!-- Poetic Text CAPTCHAs -->
 <main id="border-captcha-1" style="display: none;">
   <h1 class="title">Border Statement</h1>
   <p>To proceed, state your purpose in entering the United States.</p>
-  <textarea id="userStatement" placeholder="Type something meaningful..."></textarea>
+  <textarea id="userStatement"></textarea>
   <button class="enter" onclick="validateBorderCaptcha()">Submit</button>
   <div class="response" id="captchaResponse"></div>
 </main>
 
 <main id="border-captcha-2" style="display: none;">
   <h1 class="title">Declaration of Loss</h1>
-  <p>We record what is no longer with you. Type what you&rsquo;ve left behind.</p>
+  <p>We record what is no longer with you. Type what you’ve left behind.</p>
   <textarea id="userLoss"></textarea>
   <button class="enter" onclick="validateLossCaptcha()">Submit</button>
   <div class="response" id="lossResponse"></div>
@@ -205,12 +205,12 @@
 <main id="border-captcha-3" style="display: none;">
   <h1 class="title">Justification</h1>
   <p>Why do you deserve entry into the United States?</p>
-  <textarea id="userJustification" placeholder="In 50 words or less..."></textarea>
+  <textarea id="userJustification"></textarea>
   <button class="enter" onclick="validateJustification()">Submit</button>
   <div class="response" id="justificationResponse"></div>
 </main>
 
-<!-- Final entry and responses -->
+<!-- Final Entry Message -->
 <main id="final-entry-message" style="display: none;">
   <h1 class="title">Entry Granted</h1>
   <p style="color: #0f0; font-size: 14px; text-transform: uppercase; margin-top: 10px;">
@@ -229,7 +229,7 @@
 <script src="https://cdn.jsdelivr.net/gh/netizenorg/netnet-standard-library/build/nn.min.js"></script>
 <script>
 /* global nn */
-let cap = Number(localStorage.getItem('cap') || 0);
+let cap = 0;
 const data = [
   { title: 'Type the text you see in the image:', image: '3ntrydenied.png', answer: '3ntryD3n13d' },
   { title: 'Type the text you see in the image:', image: 'captcha.png', answer: 'i113g41a1i3n' },
@@ -246,7 +246,6 @@ function updateCaptcha() {
 }
 
 async function checkCaptcha() {
-  localStorage.setItem('cap', cap);
   const c = data[cap];
   const text = nn.get('.answer').value;
   if (text.toLowerCase() === c.answer.toLowerCase()) {
@@ -254,7 +253,7 @@ async function checkCaptcha() {
     nn.get('main').scale(4).css({ opacity: 0 });
     await nn.sleep(3000);
     if (cap >= data.length) {
-      document.querySelector('#text-captcha').style.display = 'none';
+      document.getElementById('text-captcha').style.display = 'none';
       document.getElementById('grid-captcha').style.display = 'block';
     } else {
       updateCaptcha();
@@ -267,65 +266,37 @@ async function checkCaptcha() {
 }
 
 nn.get('.enter').on('click', checkCaptcha);
-nn.on('load', () => {
-  if (cap >= data.length) {
-    document.querySelector('#text-captcha').style.display = 'none';
-    document.getElementById('grid-captcha').style.display = 'block';
-  } else {
-    updateCaptcha();
-  }
-});
+nn.on('load', updateCaptcha);
 
-document.querySelectorAll('.box').forEach(box => box.addEventListener('click', () => box.classList.toggle('selected')));
+document.querySelectorAll('.box').forEach(b => b.addEventListener('click', () => b.classList.toggle('selected')));
 
-document.querySelector('.grid-submit').addEventListener('click', async () => {
-  let allCorrect = true;
-  document.querySelectorAll('#grid-captcha .box').forEach(box => {
-    if ((box.getAttribute('data-correct') === 'true') !== box.classList.contains('selected')) allCorrect = false;
+function handleGrid(nextId, prevId, submitClass) {
+  document.querySelector(submitClass).addEventListener('click', async () => {
+    let allCorrect = true;
+    document.querySelectorAll(prevId + ' .box').forEach(box => {
+      if ((box.getAttribute('data-correct') === 'true') !== box.classList.contains('selected')) allCorrect = false;
+    });
+    if (allCorrect) {
+      const g = document.querySelector(prevId);
+      g.classList.add('zoom-out');
+      await new Promise(r => setTimeout(r, 2000));
+      g.style.display = 'none';
+      document.getElementById(nextId).style.display = 'block';
+    }
   });
-  if (allCorrect) {
-    const g = document.getElementById('grid-captcha');
-    g.classList.add('zoom-out');
-    await new Promise(r => setTimeout(r, 2000));
-    g.style.display = 'none';
-    document.getElementById('grid-captcha-2').style.display = 'block';
-  }
-});
+}
 
-document.querySelector('.grid-submit-2').addEventListener('click', async () => {
-  let allCorrect = true;
-  document.querySelectorAll('#grid-captcha-2 .box').forEach(box => {
-    if ((box.getAttribute('data-correct') === 'true') !== box.classList.contains('selected')) allCorrect = false;
-  });
-  if (allCorrect) {
-    const g2 = document.getElementById('grid-captcha-2');
-    g2.classList.add('zoom-out');
-    await new Promise(r => setTimeout(r, 2000));
-    g2.style.display = 'none';
-    document.getElementById('grid-captcha-3').style.display = 'block';
-  }
-});
-
-document.querySelector('.grid-submit-3').addEventListener('click', async () => {
-  let allCorrect = true;
-  document.querySelectorAll('#grid-captcha-3 .box').forEach(box => {
-    if ((box.getAttribute('data-correct') === 'true') !== box.classList.contains('selected')) allCorrect = false;
-  });
-  if (allCorrect) {
-    const g3 = document.getElementById('grid-captcha-3');
-    g3.classList.add('zoom-out');
-    await new Promise(r => setTimeout(r, 2000));
-    g3.style.display = 'none';
-    document.getElementById('border-captcha-1').style.display = 'block';
-  }
-});
+handleGrid('grid-captcha-2', '#grid-captcha', '.grid-submit');
+handleGrid('grid-captcha-3', '#grid-captcha-2', '.grid-submit-2');
+handleGrid('border-captcha-1', '#grid-captcha-3', '.grid-submit-3');
 
 function validateBorderCaptcha() {
   const input = document.getElementById('userStatement').value.trim();
   const response = document.getElementById('captchaResponse');
   if (!input) return response.textContent = "Silence is also a choice. But not a valid one here.";
   response.textContent = `"${input}" logged. The gate acknowledges your intent.`;
-  responses.statement = input; localStorage.setItem('responses', JSON.stringify(responses));
+  responses.statement = input;
+  localStorage.setItem('responses', JSON.stringify(responses));
   document.getElementById('border-captcha-1').classList.add('zoom-out');
   setTimeout(() => {
     document.getElementById('border-captcha-1').style.display = 'none';
@@ -338,7 +309,8 @@ function validateLossCaptcha() {
   const response = document.getElementById('lossResponse');
   if (!input) return response.textContent = "Nothing? That too will be recorded.";
   response.textContent = `"${input}" has been registered as loss.`;
-  responses.loss = input; localStorage.setItem('responses', JSON.stringify(responses));
+  responses.loss = input;
+  localStorage.setItem('responses', JSON.stringify(responses));
   document.getElementById('border-captcha-2').classList.add('zoom-out');
   setTimeout(() => {
     document.getElementById('border-captcha-2').style.display = 'none';
@@ -351,7 +323,8 @@ function validateJustification() {
   const response = document.getElementById('justificationResponse');
   if (!input) return response.textContent = "An absence of reason is still a reason.";
   response.textContent = `"${input}" has been noted. This record will be reviewed by unseen authorities.`;
-  responses.justification = input; localStorage.setItem('responses', JSON.stringify(responses));
+  responses.justification = input;
+  localStorage.setItem('responses', JSON.stringify(responses));
   document.getElementById('border-captcha-3').classList.add('zoom-out');
   setTimeout(() => {
     document.getElementById('border-captcha-3').style.display = 'none';
@@ -361,12 +334,10 @@ function validateJustification() {
 
 function showResponses() {
   const stored = JSON.parse(localStorage.getItem('responses') || '{}');
-  const summary = `
-    <strong>Purpose:</strong> ${stored.statement || '[No entry]'}<br>
-    <strong>Loss:</strong> ${stored.loss || '[No entry]'}<br>
-    <strong>Justification:</strong> ${stored.justification || '[No entry]'}
-  `;
-  document.getElementById('storedResponses').innerHTML = summary;
+  document.getElementById('storedResponses').innerHTML = 
+    `<strong>Purpose:</strong> ${stored.statement || '[No entry]'}<br>
+     <strong>Loss:</strong> ${stored.loss || '[No entry]'}<br>
+     <strong>Justification:</strong> ${stored.justification || '[No entry]'}`;
   document.getElementById('response-summary').style.display = 'block';
 }
 </script>
