@@ -138,80 +138,79 @@
   }
 </style>
 
-
-<main>
+<!-- Core Captcha Sequence -->
+<main id="text-captcha">
   <h1 class="title">Says Something</h1>
   <img class="captcha" src="keyboard-cat.jpg" alt="captcha image">
-  <p></p>
   <input type="text" class="answer">
   <button class="enter">Enter</button>
 </main>
 
 <main id="grid-captcha" style="display: none;">
   <h1 class="title">Select all valid forms of ID for entry into the US</h1>
-  <p></p>
-
   <div class="grid">
-    <div class="box" data-correct="false"><img src="library card.webp" alt=""></div>
-    <div class="box" data-correct="false"><img src="library.jpg" alt=""></div>
-    <div class="box" data-correct="false"><img src="oregon.webp" alt=""></div>
-    <div class="box" data-correct="true"><img src="passport.avif" alt=""></div>
-    <div class="box" data-correct="false"><img src="mpassport.jpeg" alt=""></div>
-    <div class="box" data-correct="true"><img src="realid.jpg" alt=""></div>
+    <div class="box" data-correct="false"><img src="library card.webp"></div>
+    <div class="box" data-correct="false"><img src="library.jpg"></div>
+    <div class="box" data-correct="false"><img src="oregon.webp"></div>
+    <div class="box" data-correct="true"><img src="passport.avif"></div>
+    <div class="box" data-correct="false"><img src="mpassport.jpeg"></div>
+    <div class="box" data-correct="true"><img src="realid.jpg"></div>
   </div>
-
   <button class="enter grid-submit">Submit</button>
 </main>
 
 <main id="grid-captcha-2" style="display: none;">
   <h1 class="title">Select all the verified border crossings</h1>
-  <p></p>
   <div class="grid">
-    <div class="box" data-correct="true"><img src="customs.jpg" alt=""></div>
-    <div class="box" data-correct="false"><img src="fores.jpg" alt=""></div>
-    <div class="box" data-correct="false"><img src="sewer.webp" alt=""></div>
-    <div class="box" data-correct="true"><img src="airport.jpg" alt=""></div>
-    <div class="box" data-correct="false"><img src="desert.webp" alt=""></div>
-    <div class="box" data-correct="true"><img src="land.jpg" alt=""></div>
+    <div class="box" data-correct="true"><img src="customs.jpg"></div>
+    <div class="box" data-correct="false"><img src="fores.jpg"></div>
+    <div class="box" data-correct="false"><img src="sewer.webp"></div>
+    <div class="box" data-correct="true"><img src="airport.jpg"></div>
+    <div class="box" data-correct="false"><img src="desert.webp"></div>
+    <div class="box" data-correct="true"><img src="land.jpg"></div>
   </div>
   <button class="enter grid-submit-2">Submit</button>
 </main>
 
 <main id="grid-captcha-3" style="display: none;">
   <h1 class="title">Select all non-citizens</h1>
-  <p></p>
   <div class="grid">
-    <div class="box" data-correct="false"><img src="white.jpg" alt=""></div>
-    <div class="box" data-correct="true"><img src="we fee.webp" alt=""></div>
-    <div class="box" data-correct="false"><img src="immi.jpg" alt=""></div>
-    <div class="box" data-correct="false"><img src="america.webp" alt=""></div>
-    <div class="box" data-correct="true"><img src="fence.jpg" alt=""></div>
-    <div class="box" data-correct="false"><img src="flag.jpeg" alt=""></div>
+    <div class="box" data-correct="false"><img src="white.jpg"></div>
+    <div class="box" data-correct="true"><img src="we fee.webp"></div>
+    <div class="box" data-correct="false"><img src="immi.jpg"></div>
+    <div class="box" data-correct="false"><img src="america.webp"></div>
+    <div class="box" data-correct="true"><img src="fence.jpg"></div>
+    <div class="box" data-correct="false"><img src="flag.jpeg"></div>
   </div>
   <button class="enter grid-submit-3">Submit</button>
 </main>
 
+<!-- Border-style text captchas -->
 <main id="border-captcha-1" style="display: none;">
-  <div class="title">Border Statement</div>
-  <div class="prompt">To proceed, state your purpose in entering the United States.</div>
+  <h1 class="title">Border Statement</h1>
+  <p>To proceed, state your purpose in entering the United States.</p>
   <textarea id="userStatement" placeholder="Type something meaningful..."></textarea>
-  <button onclick="validateBorderCaptcha()">Submit</button>
+  <button class="enter" onclick="validateBorderCaptcha()">Submit</button>
   <div class="response" id="captchaResponse"></div>
 </main>
+
 <main id="border-captcha-2" style="display: none;">
-  <div class="title">Declaration of Loss</div>
-  <div class="prompt">We record what is no longer with you. Type what you’ve left behind.</div>
-  <textarea id="userLoss" placeholder=""></textarea>
-  <button onclick="validateLossCaptcha()">Submit</button>
+  <h1 class="title">Declaration of Loss</h1>
+  <p>We record what is no longer with you. Type what you&rsquo;ve left behind.</p>
+  <textarea id="userLoss"></textarea>
+  <button class="enter" onclick="validateLossCaptcha()">Submit</button>
   <div class="response" id="lossResponse"></div>
 </main>
+
 <main id="border-captcha-3" style="display: none;">
-  <div class="title">Justification</div>
-  <div class="prompt">Why do you deserve entry into the United States?</div>
+  <h1 class="title">Justification</h1>
+  <p>Why do you deserve entry into the United States?</p>
   <textarea id="userJustification" placeholder="In 50 words or less..."></textarea>
-  <button onclick="validateJustification()">Submit</button>
+  <button class="enter" onclick="validateJustification()">Submit</button>
   <div class="response" id="justificationResponse"></div>
 </main>
+
+<!-- Final entry and responses -->
 <main id="final-entry-message" style="display: none;">
   <h1 class="title">Entry Granted</h1>
   <p style="color: #0f0; font-size: 14px; text-transform: uppercase; margin-top: 10px;">
@@ -219,219 +218,155 @@
     Access granted.<br>
     Welcome.
   </p>
+  <button class="enter" onclick="showResponses()">See Other Responses</button>
 </main>
 
+<main id="response-summary" style="display: none;">
+  <h1 class="title">Previous Responses</h1>
+  <div class="response" id="storedResponses"></div>
+</main>
 
 <script src="https://cdn.jsdelivr.net/gh/netizenorg/netnet-standard-library/build/nn.min.js"></script>
 <script>
 /* global nn */
-let cap = 0
-  const data = [
-    {
-      title: 'Type the text you see in the image:',
-      image: '3ntrydenied.png',
-      answer: '3ntryD3n13d'
-    },
-    {
-      title: 'Type the text you see in the image:',
-      image: 'captcha.png',
-      answer: 'i113g41a1i3n'
-    },
-    {
-      title: 'Type the text you see in the image:',
-      image: 'captcha (1).png',
-      answer: '4syLUmd3n13d'
+let cap = Number(localStorage.getItem('cap') || 0);
+const data = [
+  { title: 'Type the text you see in the image:', image: '3ntrydenied.png', answer: '3ntryD3n13d' },
+  { title: 'Type the text you see in the image:', image: 'captcha.png', answer: 'i113g41a1i3n' },
+  { title: 'Type the text you see in the image:', image: 'captcha (1).png', answer: '4syLUmd3n13d' }
+];
+
+let responses = JSON.parse(localStorage.getItem('responses') || '{}');
+
+function updateCaptcha() {
+  const c = data[cap];
+  nn.get('.title').content(c.title);
+  nn.get('.captcha').set({ src: c.image });
+  nn.get('.answer').value = '';
+}
+
+async function checkCaptcha() {
+  localStorage.setItem('cap', cap);
+  const c = data[cap];
+  const text = nn.get('.answer').value;
+  if (text.toLowerCase() === c.answer.toLowerCase()) {
+    cap++;
+    nn.get('main').scale(4).css({ opacity: 0 });
+    await nn.sleep(3000);
+    if (cap >= data.length) {
+      document.querySelector('#text-captcha').style.display = 'none';
+      document.getElementById('grid-captcha').style.display = 'block';
+    } else {
+      updateCaptcha();
+      await nn.sleep(100);
+      nn.get('main').scale(1).css({ opacity: 1, transition: 'none' });
+      await nn.sleep(100);
+      nn.get('main').css({ transition: 'all 3s' });
     }
-  ]
-
-  function updateCaptcha () {
-    const c = data[cap]
-    nn.get('.title').content(c.title)
-    nn.get('.captcha').set({ src: c.image })
-    nn.get('.answer').value = ''
-  }
-
-  async function checkCaptcha () {
-    localStorage.setItem('cap', cap)
-    const c = data[cap]
-    const text = nn.get('.answer').value
-    if (text.toLowerCase() === c.answer.toLowerCase()) {
-  cap++
-  nn.get('main')
-    .scale(4)
-    .css({ opacity: 0 })
-  await nn.sleep(3000)
-
-  if (cap >= data.length) {
-    // All text CAPTCHAs are done, show the grid
-    document.querySelector('main').style.display = 'none'
-    document.getElementById('grid-captcha').style.display = 'block'
-  } else {
-    updateCaptcha()
-    await nn.sleep(100)
-    nn.get('main')
-      .scale(1)
-      .css({ opacity: 1, transition: 'none' })
-    await nn.sleep(100)
-    nn.get('main').css({ transition: 'all 3s' })
   }
 }
 
-  }
-  
- // for middle level, look down at your hands, pick which box best matches the shade within your visio
-
-nn.get('.enter').on('click', checkCaptcha)
+nn.get('.enter').on('click', checkCaptcha);
 nn.on('load', () => {
   if (cap >= data.length) {
-    // Skip to grid CAPTCHA if text CAPTCHAs already done
-    document.querySelector('main').style.display = 'none'
-    document.getElementById('grid-captcha').style.display = 'block'
+    document.querySelector('#text-captcha').style.display = 'none';
+    document.getElementById('grid-captcha').style.display = 'block';
   } else {
-    updateCaptcha()
+    updateCaptcha();
   }
-})
-// Grid selection toggle
-document.querySelectorAll('.box').forEach(box => {
-  box.addEventListener('click', () => {
-    box.classList.toggle('selected')
-  })
-})
+});
 
-// Grid answer check
+document.querySelectorAll('.box').forEach(box => box.addEventListener('click', () => box.classList.toggle('selected')));
+
 document.querySelector('.grid-submit').addEventListener('click', async () => {
-  let allCorrect = true
+  let allCorrect = true;
   document.querySelectorAll('#grid-captcha .box').forEach(box => {
-    const correct = box.getAttribute('data-correct') === 'true'
-    const selected = box.classList.contains('selected')
-    if (correct !== selected) allCorrect = false
-  })
-
+    if ((box.getAttribute('data-correct') === 'true') !== box.classList.contains('selected')) allCorrect = false;
+  });
   if (allCorrect) {
-    localStorage.setItem('captchaDone', 'true')
-    const gridMain = document.getElementById('grid-captcha')
-    gridMain.classList.add('zoom-out')
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    gridMain.style.display = 'none'
-    document.getElementById('grid-captcha-2').style.display = 'block'
-  } else {
-    alert('Checkpoint failed. Try again.')
+    const g = document.getElementById('grid-captcha');
+    g.classList.add('zoom-out');
+    await new Promise(r => setTimeout(r, 2000));
+    g.style.display = 'none';
+    document.getElementById('grid-captcha-2').style.display = 'block';
   }
-})
- document.querySelector('.grid-submit-2').addEventListener('click', async () => {
-  let allCorrect = true
+});
+
+document.querySelector('.grid-submit-2').addEventListener('click', async () => {
+  let allCorrect = true;
   document.querySelectorAll('#grid-captcha-2 .box').forEach(box => {
-    const correct = box.getAttribute('data-correct') === 'true'
-    const selected = box.classList.contains('selected')
-    if (correct !== selected) allCorrect = false
-  })
-
+    if ((box.getAttribute('data-correct') === 'true') !== box.classList.contains('selected')) allCorrect = false;
+  });
   if (allCorrect) {
-    const gridMain2 = document.getElementById('grid-captcha-2')
-    gridMain2.classList.add('zoom-out')
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    gridMain2.style.display = 'none'
-    document.getElementById('grid-captcha-3').style.display = 'block'
-  } else {
-    alert('Failed.')
+    const g2 = document.getElementById('grid-captcha-2');
+    g2.classList.add('zoom-out');
+    await new Promise(r => setTimeout(r, 2000));
+    g2.style.display = 'none';
+    document.getElementById('grid-captcha-3').style.display = 'block';
   }
-})
-  
+});
+
 document.querySelector('.grid-submit-3').addEventListener('click', async () => {
-  let allCorrect = true
+  let allCorrect = true;
   document.querySelectorAll('#grid-captcha-3 .box').forEach(box => {
-    const correct = box.getAttribute('data-correct') === 'true'
-    const selected = box.classList.contains('selected')
-    if (correct !== selected) allCorrect = false
-  })
-
+    if ((box.getAttribute('data-correct') === 'true') !== box.classList.contains('selected')) allCorrect = false;
+  });
   if (allCorrect) {
-    const gridMain3 = document.getElementById('grid-captcha-3')
-    gridMain3.classList.add('zoom-out')
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    gridMain3.style.display = 'none'
-    document.getElementById('border-captcha-1').style.display = 'block'
-  } else {
-    alert('Failed. Try again.')
+    const g3 = document.getElementById('grid-captcha-3');
+    g3.classList.add('zoom-out');
+    await new Promise(r => setTimeout(r, 2000));
+    g3.style.display = 'none';
+    document.getElementById('border-captcha-1').style.display = 'block';
   }
-})
+});
 
-function skipToFinalCaptcha() {
-  // Hide all other captcha sections
-  document.querySelectorAll('main').forEach(m => m.style.display = 'none')
-
-  // Show final captcha
-  const final = document.getElementById('grid-captcha-3')
-  if (final) {
-    final.style.display = 'block'
-    localStorage.setItem('cap', data.length) // so your code won't auto-redirect back
-  }
-}
-  
- function validateBorderCaptcha() {
-  const input = document.getElementById('userStatement').value.trim()
-  const response = document.getElementById('captchaResponse')
-  const border1 = document.getElementById('border-captcha-1')
-  const border2 = document.getElementById('border-captcha-2')
-
-  if (input.length === 0) {
-    response.textContent = "Silence is also a choice. But not a valid one here."
-  } else {
-    response.textContent = `"${input}" logged. The gate acknowledges your intent.`
-    
-    // Animate zoom-out of the first captcha
-    border1.classList.add('zoom-out')
-
-    setTimeout(() => {
-      border1.style.display = 'none'
-      border2.style.display = 'block'
-    }, 2000) // matches transition duration
-  }
+function validateBorderCaptcha() {
+  const input = document.getElementById('userStatement').value.trim();
+  const response = document.getElementById('captchaResponse');
+  if (!input) return response.textContent = "Silence is also a choice. But not a valid one here.";
+  response.textContent = `"${input}" logged. The gate acknowledges your intent.`;
+  responses.statement = input; localStorage.setItem('responses', JSON.stringify(responses));
+  document.getElementById('border-captcha-1').classList.add('zoom-out');
+  setTimeout(() => {
+    document.getElementById('border-captcha-1').style.display = 'none';
+    document.getElementById('border-captcha-2').style.display = 'block';
+  }, 2000);
 }
 
 function validateLossCaptcha() {
-  const input = document.getElementById('userLoss').value.trim()
-  const response = document.getElementById('lossResponse')
-
-  if (input.length === 0) {
-    response.textContent = "Nothing? That too will be recorded."
-  } else {
-    response.textContent = `"${input}" has been registered as loss.`
-    // Optional: transition to next CAPTCHA or end scene
-    setTimeout(() => {
-  document.getElementById('border-captcha-2').classList.add('zoom-out')
-}, 1000)
-
-setTimeout(() => {
-  document.getElementById('border-captcha-2').style.display = 'none'
-  document.getElementById('border-captcha-3').style.display = 'block'
-  document.getElementById('border-captcha-3').scrollIntoView({ behavior: 'smooth' })
-}, 2500)
-  }
+  const input = document.getElementById('userLoss').value.trim();
+  const response = document.getElementById('lossResponse');
+  if (!input) return response.textContent = "Nothing? That too will be recorded.";
+  response.textContent = `"${input}" has been registered as loss.`;
+  responses.loss = input; localStorage.setItem('responses', JSON.stringify(responses));
+  document.getElementById('border-captcha-2').classList.add('zoom-out');
+  setTimeout(() => {
+    document.getElementById('border-captcha-2').style.display = 'none';
+    document.getElementById('border-captcha-3').style.display = 'block';
+  }, 2500);
 }
+
 function validateJustification() {
-  const input = document.getElementById('userJustification').value.trim()
-  const response = document.getElementById('justificationResponse')
-  const border3 = document.getElementById('border-captcha-3')
-  const finalMessage = document.getElementById('final-entry-message')
-
-  if (input.length === 0) {
-    response.textContent = "An absence of reason is still a reason."
-  } else {
-    response.textContent = `"${input}" has been noted. This record will be reviewed by unseen authorities.`
-
-    // Animate transition to final message
-    setTimeout(() => {
-      border3.classList.add('zoom-out')
-    }, 1500)
-
-    setTimeout(() => {
-      border3.style.display = 'none'
-      finalMessage.style.display = 'block'
-      finalMessage.scrollIntoView({ behavior: 'smooth' })
-    }, 3000)
-  }
+  const input = document.getElementById('userJustification').value.trim();
+  const response = document.getElementById('justificationResponse');
+  if (!input) return response.textContent = "An absence of reason is still a reason.";
+  response.textContent = `"${input}" has been noted. This record will be reviewed by unseen authorities.`;
+  responses.justification = input; localStorage.setItem('responses', JSON.stringify(responses));
+  document.getElementById('border-captcha-3').classList.add('zoom-out');
+  setTimeout(() => {
+    document.getElementById('border-captcha-3').style.display = 'none';
+    document.getElementById('final-entry-message').style.display = 'block';
+  }, 3000);
 }
 
-
+function showResponses() {
+  const stored = JSON.parse(localStorage.getItem('responses') || '{}');
+  const summary = `
+    <strong>Purpose:</strong> ${stored.statement || '[No entry]'}<br>
+    <strong>Loss:</strong> ${stored.loss || '[No entry]'}<br>
+    <strong>Justification:</strong> ${stored.justification || '[No entry]'}
+  `;
+  document.getElementById('storedResponses').innerHTML = summary;
+  document.getElementById('response-summary').style.display = 'block';
+}
 </script>
